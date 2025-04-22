@@ -2,6 +2,7 @@ import logging
 import requests
 from typing import Optional, Dict, Any
 
+
 def is_requests_installed() -> bool:
     """
     Checks if the 'requests' library is installed.
@@ -11,18 +12,23 @@ def is_requests_installed() -> bool:
     """
     try:
         import requests
+
         return True
     except ImportError:
         return False
+
 
 def configure_logger() -> None:
     """
     Configures the logging settings for the application.
     Sets the log level to INFO and specifies the log message format.
     """
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def request(client, url: str, method: str = "GET", payload: Optional[Dict[str, Any]] = None) -> requests.Response:
+
+def request(
+    client, url: str, method: str = "GET", payload: Optional[Dict[str, Any]] = None
+) -> requests.Response:
     """
     Sends an HTTP request using the specified method and URL.
 
@@ -46,7 +52,13 @@ def request(client, url: str, method: str = "GET", payload: Optional[Dict[str, A
     func = getattr(client.session, method.lower())
     try:
         if method in ["POST", "PUT"] and payload:
-            return func(url, headers=client.headers, json=payload, verify=client.verify, timeout=client.timeout)
+            return func(
+                url,
+                headers=client.headers,
+                json=payload,
+                verify=client.verify,
+                timeout=client.timeout,
+            )
         return func(url, headers=client.headers, verify=client.verify, timeout=client.timeout)
     except requests.RequestException as e:
         logging.error(f"Request failed: {e}")

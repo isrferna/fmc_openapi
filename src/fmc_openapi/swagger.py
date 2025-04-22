@@ -2,6 +2,7 @@ import logging
 from .utils import request
 from typing import Dict, Any
 
+
 def fetch_swagger_json(client) -> Dict[str, Any]:
     """
     Fetches the Swagger JSON file from the provided client's Swagger URL.
@@ -20,6 +21,7 @@ def fetch_swagger_json(client) -> Dict[str, Any]:
         logging.info("Swagger file retrieved successfully")
         return resp.json()
     raise Exception("Failed to retrieve Swagger file")
+
 
 def extract_operation(client, operation_id: str) -> Dict[str, Any]:
     """

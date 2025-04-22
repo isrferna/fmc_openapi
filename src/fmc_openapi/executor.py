@@ -4,6 +4,7 @@ from .swagger import extract_operation
 from .utils import request
 from typing import Optional, Dict, Any
 
+
 def perform_operation(
     client,
     operation_id: str,
@@ -12,12 +13,12 @@ def perform_operation(
     manual_pagination: bool = False,
     offset: Optional[int] = None,
     limit: Optional[int] = None,
-    **kwargs: Any
+    **kwargs: Any,
 ) -> Dict[str, Any]:
     """
     Perform an API operation using the given operation ID, payload, and optional query parameters.
 
-    This function constructs the URL based on the provided operation ID and arguments, performs the API 
+    This function constructs the URL based on the provided operation ID and arguments, performs the API
     request, handles pagination if necessary, and returns the operation result.
 
     Args:

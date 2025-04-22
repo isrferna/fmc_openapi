@@ -3,18 +3,19 @@ import logging
 from .utils import request
 from typing import Tuple, Dict, Optional
 
+
 def login(client) -> Tuple[Dict[str, str], str, str]:
     """
     Perform login to the FMC and retrieve authentication details.
 
-    This function authenticates the client either using a provided token or 
+    This function authenticates the client either using a provided token or
     by using basic authentication with the username and password.
 
     Args:
         client: The FMCOpenAPIClient instance performing the login.
 
     Returns:
-        Tuple[Dict[str, str], str, str]: 
+        Tuple[Dict[str, str], str, str]:
             - A dictionary of headers including the authorization token.
             - The domain UUID (a string).
             - The Swagger URL (a string).
@@ -45,6 +46,7 @@ def login(client) -> Tuple[Dict[str, str], str, str]:
 
     swagger_url = f"https://{client.hostname}/api/api-explorer/fmc.json"
     return client.headers, domain_uuid, swagger_url
+
 
 def logout(client) -> None:
     """

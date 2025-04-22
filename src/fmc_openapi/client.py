@@ -61,6 +61,7 @@ class FMCOpenAPIClient:
 
         if not verify:
             import urllib3
+
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         self.headers = {"Content-Type": "application/json", "Accept": "application/json"}
@@ -79,7 +80,9 @@ class FMCOpenAPIClient:
         self.login()
         return self
 
-    def __exit__(self, exc_type: Optional[type], exc_value: Optional[BaseException], traceback: Optional[Any]) -> None:
+    def __exit__(
+        self, exc_type: Optional[type], exc_value: Optional[BaseException], traceback: Optional[Any]
+    ) -> None:
         """
         Exit the context manager, perform logout.
 
@@ -100,7 +103,9 @@ class FMCOpenAPIClient:
         self.headers, self.domain_uuid, self.swagger_url = login(self)
         self.swagger_json = fetch_swagger_json(self)
 
-    def operation(self, operation_id: str, payload: Optional[Dict[str, Any]] = None, **kwargs) -> Dict[str, Any]:
+    def operation(
+        self, operation_id: str, payload: Optional[Dict[str, Any]] = None, **kwargs
+    ) -> Dict[str, Any]:
         """
         Perform the specified API operation.
 

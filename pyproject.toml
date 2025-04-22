@@ -1,6 +1,6 @@
 [project]
 name = "fmc_openapi"
-version = "0.1.0"
+version = "0.1.1"
 description = "A simple Python client to interact with Cisco FMC or SCC APIs using operationId from the OpenAPI spec."
 authors = [
     {name = "Israel Fernandez",email = "israelfdzhdz@gmail.com"}
@@ -21,6 +21,7 @@ packages = [{include = "fmc_openapi", from = "src"}]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
+black = "^25.1.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

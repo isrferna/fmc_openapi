@@ -1,6 +1,7 @@
 import pytest
 from fmc_openapi import FMCOpenAPIClient
 
+
 @pytest.fixture
 def client():
     """Fixture to provide a client instance for testing"""
@@ -10,6 +11,7 @@ def client():
         password="test-password",
         verify=False,
     )
+
 
 def test_client_initialization(client):
     """Test if the client is initialized correctly"""

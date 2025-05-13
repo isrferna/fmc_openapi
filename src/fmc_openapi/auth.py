@@ -24,6 +24,8 @@ def login(client) -> Tuple[Dict[str, str], str, str]:
         ValueError: If both username and password are not provided for basic authentication.
         Exception: If the login fails due to invalid credentials or other issues.
     """
+    domain_uuid = None
+
     if client.token:
         client.headers["Authorization"] = f"Bearer {client.token}"
         logging.info("Using provided token for authentication")

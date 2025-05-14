@@ -1,7 +1,9 @@
-import logging
-import requests
-from typing import Optional, Dict, Any
+"""Utils module for the FMC OpenAPI package."""
 
+from typing import Optional, Dict, Any
+import logging
+import importlib
+import requests
 
 def is_requests_installed() -> bool:
     """
@@ -10,12 +12,7 @@ def is_requests_installed() -> bool:
     Returns:
         bool: True if the 'requests' library is installed, False otherwise.
     """
-    try:
-        import requests
-
-        return True
-    except ImportError:
-        return False
+    return importlib.util.find_spec("requests") is not None
 
 
 def configure_logger() -> None:
@@ -28,7 +25,7 @@ def configure_logger() -> None:
 
 def request(
     client, url: str, method: str = "GET", payload: Optional[Dict[str, Any]] = None
-) -> requests.Response:
+) -> "requests.Response":
     """
     Sends an HTTP request using the specified method and URL.
 
@@ -61,5 +58,5 @@ def request(
             )
         return func(url, headers=client.headers, verify=client.verify, timeout=client.timeout)
     except requests.RequestException as e:
-        logging.error(f"Request failed: {e}")
+        logging.error("Request failed: %s", e)
         raise

@@ -1,7 +1,9 @@
-import logging
-from .utils import request
-from typing import Dict, Any
+"""Swagger module for the FMC OpenAPI package."""
 
+import logging
+from typing import Dict, Any
+from .utils import request
+from .exceptions import SwaggerFetchError
 
 def fetch_swagger_json(client) -> Dict[str, Any]:
     """
@@ -20,7 +22,7 @@ def fetch_swagger_json(client) -> Dict[str, Any]:
     if resp.status_code == 200:
         logging.info("Swagger file retrieved successfully")
         return resp.json()
-    raise Exception("Failed to retrieve Swagger file")
+    raise SwaggerFetchError("Failed to retrieve Swagger file")
 
 
 def extract_operation(client, operation_id: str) -> Dict[str, Any]:
@@ -35,10 +37,11 @@ def extract_operation(client, operation_id: str) -> Dict[str, Any]:
         Dict[str, Any]: A dictionary containing the operation's URL, method, and parameters.
 
     Raises:
-        Exception: If the Swagger JSON is not loaded or the operation ID is not found in the Swagger file.
+        Exception: If the Swagger JSON is not loaded or the operation ID is not found in the
+        Swagger file.
     """
     if not client.swagger_json:
-        raise Exception("Swagger not loaded")
+        raise SwaggerFetchError("Swagger not loaded")
 
     for path, path_item in client.swagger_json.get("paths", {}).items():
         for method, operation in path_item.items():
@@ -49,4 +52,4 @@ def extract_operation(client, operation_id: str) -> Dict[str, Any]:
                     "parameters": operation.get("parameters", []),
                 }
 
-    raise Exception(f"Operation ID '{operation_id}' not found")
+    raise SwaggerFetchError(f"Operation ID '{operation_id}' not found")

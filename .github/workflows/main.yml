@@ -1,0 +1,31 @@
+name: Run Pytest with Poetry
+
+on:
+  pull_request:  # Run the workflow on pull requests
+    branches:
+      - main  # Replace 'main' with your target branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+
+    - name: Install dependencies with Poetry
+      run: |
+        ~/.local/bin/poetry install  # Adjust path if needed
+
+    - name: Run tests with Pytest
+      run: |
+        ~/.local/bin/poetry run pytest

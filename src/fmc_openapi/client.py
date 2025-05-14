@@ -1,11 +1,14 @@
+"""Client module for the FMC OpenAPI package."""
+
+from typing import Optional, Dict, Any
 import requests
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
+import urllib3
 from .auth import login, logout
-from .swagger import fetch_swagger_json, extract_operation
+from .swagger import fetch_swagger_json
 from .executor import perform_operation
 from .utils import is_requests_installed, configure_logger
-from typing import Optional, Dict, Any
 
 
 class FMCOpenAPIClient:
@@ -37,9 +40,11 @@ class FMCOpenAPIClient:
             ModuleNotFoundError: If the 'requests' library is not installed.
         """
         if not is_requests_installed():
-            raise ModuleNotFoundError(
-                "The 'requests' library is not installed. Please install it with 'pip install requests'."
+            error_message = (
+                "The 'requests' library is not installed. "
+                "Please install it with 'pip install requests'."
             )
+            raise ModuleNotFoundError(error_message)
 
         self.hostname = hostname
         self.username = username
@@ -50,6 +55,9 @@ class FMCOpenAPIClient:
         self.timeout = timeout
         self.session = requests.Session()
         self.domain_uuid = ""
+        self.headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        self.swagger_json = None
+        self.swagger_url = None
 
         retry_strategy = Retry(
             total=retries,
@@ -60,13 +68,8 @@ class FMCOpenAPIClient:
         self.session.mount("https://", HTTPAdapter(max_retries=retry_strategy))
 
         if not verify:
-            import urllib3
-
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-        self.headers = {"Content-Type": "application/json", "Accept": "application/json"}
-        self.swagger_json = None
-        self.swagger_url = None
         configure_logger()
 
     def __enter__(self) -> "FMCOpenAPIClient":

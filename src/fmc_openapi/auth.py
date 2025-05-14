@@ -1,7 +1,10 @@
+"""Auth module for the FMC OpenAPI package."""
+
 import base64
 import logging
+from typing import Tuple, Dict
 from .utils import request
-from typing import Tuple, Dict, Optional
+from .exceptions import AuthenticationError
 
 
 def login(client) -> Tuple[Dict[str, str], str, str]:
@@ -39,7 +42,7 @@ def login(client) -> Tuple[Dict[str, str], str, str]:
 
         resp = request(client, login_url, "POST")
         if resp.status_code != 204:
-            raise Exception("Login failed")
+            raise AuthenticationError("Login failed: unexpected status code")
 
         headers = resp.headers
         client.headers["X-auth-access-token"] = headers.get("x-auth-access-token")
@@ -66,5 +69,5 @@ def logout(client) -> None:
         client.session.close()
         logging.info("Logged out successfully")
     except Exception as e:
-        logging.error(f"Error during logout: {e}")
+        logging.error("Error during logout: %s", e)
         raise

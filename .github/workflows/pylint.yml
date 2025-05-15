@@ -1,4 +1,4 @@
-name: Pylint
+name: Pylint with Poetry
 
 on: [push]
 
@@ -10,14 +10,21 @@ jobs:
         python-version: ["3.11"]
     steps:
     - uses: actions/checkout@v4
+    
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+
+    - name: Install Poetry
       run: |
-        python -m pip install --upgrade pip
-        pip install pylint requests pytest
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "Poetry installed successfully"
+
+    - name: Install dependencies with Poetry
+      run: |
+        ~/.local/bin/poetry install --no-root  # Installs dependencies from pyproject.toml
+
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        ~/.local/bin/poetry run pylint $(git ls-files '*.py')
